@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin:0;
+        }
+        canvas {
+            border: 3px solid #333;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="400"></canvas>
+
+    <script>
+
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        let data = {};
+        const S = 50;
+        let x = (canvas.width - S) / 2;
+        let y = (canvas.height - S) / 2;
+
+        function drawSqare(){
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(x, y, S,S);
+        }
+        canvas.addEventListener('click', function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+
+            x = mx - S/2;
+            y = my - S/2;
+
+            drawSqare();
+        });
+
+
+        
+        drawSqare()
+     
+        function getData() {
+            fetch('http://127.0.0.1:8000/get_playrs_data')
+            .then(responce => responce.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('ошибка', error))
+        }
+    
+        
+        const my_timer = setInterval( getData, 1000)
+
+    </script>
+</body>
+</html>
